@@ -15,12 +15,14 @@ import {
   Area, 
   XAxis, 
   YAxis, 
+  CartesianGrid,
   Tooltip, 
   ResponsiveContainer 
 } from 'recharts';
 import { motion } from 'framer-motion';
 import StatCard from '../components/ui/StatCard';
 import Badge from '../components/ui/Badge';
+import { useToast } from '../contexts/ToastContext';
 
 // Framer motion variants
 const containerVariants = {
@@ -50,6 +52,7 @@ const chartData = [
 const Overview = () => {
   const navigate = useNavigate();
   const { matches, setSelectedMatchId } = useOutletContext();
+  const { showToast } = useToast();
   
   // Countdown state: 2 hours, 15 minutes, 0 seconds
   const [countdown, setCountdown] = useState({ hours: 2, minutes: 15, seconds: 0 });
@@ -157,9 +160,10 @@ const Overview = () => {
               <h3 className="font-headline text-lg text-primary font-bold">Performance Index</h3>
               <p className="text-xs text-on-surface-variant">Win/Loss trends - Last 30 Days</p>
             </div>
-            <div className="flex gap-1 bg-surface-container border border-outline-variant p-[3px] rounded-lg">
-              <button className="px-3 py-1 bg-primary text-black font-mono text-[9px] font-bold uppercase rounded shadow-[0_0_12px_rgba(57,255,20,0.2)]">30D</button>
-              <button onClick={() => alert('Filtering performance dataset...')} className="px-3 py-1 text-on-surface-variant hover:text-on-surface font-mono text-[9px] font-bold uppercase rounded">7D</button>
+            <div className="flex bg-surface-container rounded border border-outline-variant/30">
+              <button onClick={() => showToast('Filtering performance dataset: 7D', 'info')} className="px-3 py-1 text-on-surface-variant hover:text-on-surface font-mono text-[9px] font-bold uppercase rounded">7D</button>
+              <button className="px-3 py-1 bg-surface-variant text-on-surface font-mono text-[9px] font-bold uppercase rounded shadow">30D</button>
+              <button className="px-3 py-1 text-on-surface-variant hover:text-on-surface font-mono text-[9px] font-bold uppercase rounded">All</button>
             </div>
           </div>
 

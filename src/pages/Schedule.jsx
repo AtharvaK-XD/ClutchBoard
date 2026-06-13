@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useNavigate } from 'react-router-dom';
 import { 
   ChevronLeft, 
   ChevronRight, 
@@ -9,12 +9,26 @@ import {
   Play,
   Tv
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Badge from '../components/ui/Badge';
 import GlassPanel from '../components/ui/GlassPanel';
+import { useToast } from '../contexts/ToastContext';
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { staggerChildren: 0.1 } }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 15 },
+  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 350, damping: 25 } }
+};
 
 const Schedule = () => {
   const { scheduleEvents, checklist, setChecklist } = useOutletContext();
   const [activeDayId, setActiveDayId] = useState(3); // Default Wed Aug 23
+  const navigate = useNavigate();
+  const { showToast } = useToast();
 
   // Handle checking/unchecking tasks
   const handleToggleChecklist = (id) => {
@@ -28,9 +42,14 @@ const Schedule = () => {
   const primaryEvent = activeDay.events[0] || { title: 'Rest Day', time: 'All Day', type: 'rest' };
 
   return (
-    <div className="space-y-8 animate-fadeIn">
+    <motion.div 
+      variants={containerVariants}
+      initial="hidden"
+      animate="show"
+      className="space-y-8"
+    >
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-outline-variant pb-6">
+      <motion.div variants={itemVariants} className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-outline-variant pb-6">
         <div>
           <h2 className="font-headline text-2xl font-extrabold text-primary uppercase select-none">Operational Schedule</h2>
           <p className="text-xs text-on-surface-variant">Strategic calendar and team training schedules</p>
@@ -45,7 +64,7 @@ const Schedule = () => {
             Today
           </button>
           <button 
-            onClick={() => alert('Viewing previous week...')} 
+            onClick={() => showToast('Loaded previous week calendar.', 'info')} 
             className="w-8 h-8 rounded-full border border-outline-variant hover:border-primary/50 hover:text-primary transition-colors flex items-center justify-center text-on-surface-variant"
           >
             <ChevronLeft className="w-4 h-4" />
@@ -54,16 +73,16 @@ const Schedule = () => {
             Aug 21 – Aug 27, 2026
           </span>
           <button 
-            onClick={() => alert('Viewing next week...')} 
+            onClick={() => showToast('Loaded next week calendar.', 'info')} 
             className="w-8 h-8 rounded-full border border-outline-variant hover:border-primary/50 hover:text-primary transition-colors flex items-center justify-center text-on-surface-variant"
           >
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>
-      </div>
+      </motion.div>
 
       {/* Weekly Strip */}
-      <div className="grid grid-cols-1 md:grid-cols-7 gap-2">
+      <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-7 gap-2">
         {scheduleEvents.map(day => {
           const isToday = day.id === activeDayId;
           
@@ -96,12 +115,12 @@ const Schedule = () => {
             </div>
           );
         })}
-      </div>
+      </motion.div>
 
       {/* Detail Grid */}
       <div className="grid grid-cols-12 gap-6 items-start">
         {/* Event Detail panel */}
-        <div className="col-span-12 lg:col-span-8">
+        <motion.div variants={itemVariants} className="col-span-12 lg:col-span-8">
           <GlassPanel className="space-y-5">
             <div className="flex justify-between items-start border-b border-outline-variant/30 pb-4">
               <div>
@@ -142,14 +161,14 @@ const Schedule = () => {
             {/* Actions */}
             <div className="flex gap-4 border-t border-outline-variant/30 pt-4">
               <button 
-                onClick={() => alert('Initializing command simulation session...')} 
+                onClick={() => showToast('Simulation Session Initialized.', 'success')} 
                 className="bg-primary text-black font-mono text-[10px] font-bold py-2.5 px-6 rounded-lg hover:opacity-90 active:scale-95 transition-all uppercase flex items-center gap-1.5"
               >
                 <Play className="w-3.5 h-3.5 fill-current" />
                 <span>Begin Session</span>
               </button>
               <button 
-                onClick={() => alert('Redirecting to matches archive page for VODs...')} 
+                onClick={() => navigate('/matches')} 
                 className="border border-outline-variant hover:border-primary/50 text-on-surface hover:text-primary font-mono text-[10px] font-bold py-2.5 px-6 rounded-lg transition-all uppercase flex items-center gap-1.5"
               >
                 <Tv className="w-3.5 h-3.5" />
@@ -162,10 +181,10 @@ const Schedule = () => {
               <span>Picks: Haven, Split | Bans: Breeze, Fracture</span>
             </div>
           </GlassPanel>
-        </div>
+        </motion.div>
 
         {/* Preparation Checklists */}
-        <aside className="col-span-12 lg:col-span-4 flex flex-col gap-6">
+        <motion.div variants={itemVariants} className="col-span-12 lg:col-span-4 flex flex-col gap-6">
           <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col gap-4">
             <div className="flex justify-between items-center select-none">
               <h4 className="font-headline text-sm text-on-surface font-bold uppercase flex items-center gap-1.5">
@@ -207,7 +226,7 @@ const Schedule = () => {
             <h4 className="font-mono text-[10px] font-bold text-on-surface-variant uppercase tracking-wider select-none">Upcoming Schedule</h4>
             <div className="flex flex-col gap-2.5">
               <div 
-                onClick={() => alert('Opening schedule event vs NAVI...')}
+                onClick={() => navigate('/matches')}
                 className="flex justify-between items-center p-3 bg-surface-container/50 border border-outline-variant/30 rounded text-xs select-none hover:border-primary/30 cursor-pointer transition-all"
               >
                 <div>
@@ -217,7 +236,7 @@ const Schedule = () => {
                 <ChevronRight className="text-on-surface-variant w-4 h-4" />
               </div>
               <div 
-                onClick={() => alert('Opening schedule event vs Team Vitality...')}
+                onClick={() => navigate('/matches')}
                 className="flex justify-between items-center p-3 bg-surface-container/50 border border-outline-variant/30 rounded text-xs select-none hover:border-primary/30 cursor-pointer transition-all"
               >
                 <div>
@@ -228,9 +247,9 @@ const Schedule = () => {
               </div>
             </div>
           </div>
-        </aside>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

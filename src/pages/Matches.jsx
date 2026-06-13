@@ -10,10 +10,23 @@ import {
   MapPin,
   TrendingUp
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Badge from '../components/ui/Badge';
+import { useToast } from '../contexts/ToastContext';
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { staggerChildren: 0.05 } }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 15 },
+  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 350, damping: 25 } }
+};
 
 const Matches = () => {
   const { matches, selectedMatchId, setSelectedMatchId } = useOutletContext();
+  const { showToast } = useToast();
   
   // Filter states
   const [tournamentFilter, setTournamentFilter] = useState('All Tournaments');
@@ -42,33 +55,38 @@ const Matches = () => {
   const activeMatch = matches.find(m => m.id === selectedMatchId) || filteredMatches[0] || matches[0];
 
   return (
-    <div className="space-y-8 animate-fadeIn">
+    <motion.div 
+      variants={containerVariants}
+      initial="hidden"
+      animate="show"
+      className="space-y-8"
+    >
       {/* Top Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-outline-variant pb-6">
+      <motion.div variants={itemVariants} className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-outline-variant pb-6">
         <div>
           <h2 className="font-headline text-2xl font-extrabold text-primary uppercase select-none">Match History</h2>
           <p className="text-xs text-on-surface-variant">Analyze performance trends and tactical breakdowns for Team Liquid</p>
         </div>
         <div className="flex gap-2">
           <button 
-            onClick={() => alert('Opening dashboard settings filter dialog...')} 
+            onClick={() => showToast('Opening advanced dashboard filter dialog.', 'info')} 
             className="bg-surface-container-low border border-outline-variant px-4 py-2 rounded-md flex items-center gap-1.5 font-mono text-[10px] font-bold text-on-surface-variant hover:text-on-surface transition-colors uppercase"
           >
             <ListFilter className="w-3.5 h-3.5" />
             <span>Filter</span>
           </button>
           <button 
-            onClick={() => alert('Downloading match dossier as PDF...')} 
+            onClick={() => showToast('Match dossier PDF download started.', 'success')} 
             className="bg-surface-container-low border border-outline-variant px-4 py-2 rounded-md flex items-center gap-1.5 font-mono text-[10px] font-bold text-on-surface-variant hover:text-on-surface transition-colors uppercase"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Download Dossier</span>
           </button>
         </div>
-      </div>
+      </motion.div>
 
       {/* Filter Bar */}
-      <div className="bg-surface-container-low p-4 rounded-xl border border-outline-variant grid grid-cols-1 md:grid-cols-4 gap-4">
+      <motion.div variants={itemVariants} className="bg-surface-container-low p-4 rounded-xl border border-outline-variant grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="flex flex-col gap-1.5">
           <label className="font-mono text-[9px] text-on-surface-variant uppercase font-bold">Tournament</label>
           <select 
@@ -109,12 +127,12 @@ const Matches = () => {
             {results.map(r => <option key={r} value={r}>{r}</option>)}
           </select>
         </div>
-      </div>
+      </motion.div>
 
       {/* Main Viewport */}
       <div className="grid grid-cols-12 gap-6 items-start">
         {/* Left scrollable match listing */}
-        <div className="col-span-12 lg:col-span-4 flex flex-col gap-3 max-h-[920px] overflow-y-auto custom-scrollbar pr-1">
+        <motion.div variants={itemVariants} className="col-span-12 lg:col-span-4 flex flex-col gap-3 max-h-[920px] overflow-y-auto custom-scrollbar pr-1">
           {filteredMatches.map(m => {
             const isSelected = m.id === activeMatch?.id;
             return (
@@ -156,11 +174,17 @@ const Matches = () => {
               <p className="font-mono text-xs text-on-surface-variant uppercase">No matches match filters</p>
             </div>
           )}
-        </div>
+        </motion.div>
 
         {/* Right Match Analysis Details Viewport */}
         {activeMatch && (
-          <div className="col-span-12 lg:col-span-8 space-y-6">
+          <motion.div 
+            key={activeMatch.id}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            className="col-span-12 lg:col-span-8 space-y-6"
+          >
             {/* Score Header */}
             <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col justify-between gap-4 relative">
               <div className="flex flex-col md:flex-row justify-between items-center gap-4 border-b border-outline-variant/30 pb-4">
@@ -317,10 +341,10 @@ const Matches = () => {
                 })}
               </div>
             </div>
-          </div>
+          </motion.div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

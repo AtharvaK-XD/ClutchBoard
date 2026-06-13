@@ -15,13 +15,15 @@ import {
   FileCode
 } from 'lucide-react';
 import Badge from '../components/ui/Badge';
+import { useToast } from '../contexts/ToastContext';
 
 const Settings = () => {
   const { roster, setRoster, notifications, setNotifications } = useOutletContext();
+  const { showToast } = useToast();
 
   const handleProfileSubmit = (e) => {
     e.preventDefault();
-    alert('Saving team profile changes to system command registry...');
+    showToast('Team profile changes saved to system registry.', 'success');
   };
 
   const handleToggleNotification = (id) => {
@@ -54,7 +56,7 @@ const Settings = () => {
     };
 
     setRoster(prev => [...prev, newPlayer]);
-    alert(`Player ${name} added to ClutchBoard roster registry.`);
+    showToast(`Player ${name} added to ClutchBoard roster registry.`, 'success');
   };
 
   const handleRemovePlayer = (id) => {
@@ -97,7 +99,7 @@ const Settings = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start mt-2">
               {/* Upload Logo area */}
               <div 
-                onClick={() => alert('Opening image file selector for profile upload...')}
+                onClick={() => showToast('Opening image file selector for profile upload...', 'info')}
                 className="md:col-span-1 border-2 border-dashed border-outline-variant rounded-xl bg-surface/50 hover:border-primary flex flex-col items-center justify-center p-4 cursor-pointer text-center text-on-surface-variant hover:text-on-surface transition-all select-none h-32"
               >
                 <Upload className="w-6 h-6 mb-1.5" />
@@ -174,14 +176,14 @@ const Settings = () => {
                   {/* Actions */}
                   <div className="flex gap-1 shrink-0">
                     <button 
-                      onClick={() => alert(`Editing metadata fields for ${p.name}...`)}
+                      onClick={() => showToast(`Editing metadata fields for ${p.name}...`, 'info')}
                       className="w-8 h-8 rounded hover:bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors"
                       title="Edit Player"
                     >
                       <Edit2 className="w-4 h-4" />
                     </button>
                     <button 
-                      onClick={() => alert(`Toggling bench status for ${p.name}...`)}
+                      onClick={() => showToast(`Toggling bench status for ${p.name}...`, 'info')}
                       className="w-8 h-8 rounded hover:bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors"
                       title="Toggle Active/Bench"
                     >
@@ -293,21 +295,21 @@ const Settings = () => {
             <h4 className="font-mono text-[10px] font-bold text-on-surface-variant uppercase tracking-wider select-none">Export Data</h4>
             <div className="flex flex-col gap-2">
               <button 
-                onClick={() => alert('Exporting system telemetry dataset as CSV...')} 
+                onClick={() => showToast('Exporting system telemetry dataset as CSV...', 'success')} 
                 className="w-full py-2.5 border border-outline-variant rounded-lg flex items-center justify-center gap-2 font-mono text-[10px] text-on-surface-variant hover:text-primary hover:border-primary/50 transition-all font-bold uppercase bg-surface-container/30"
               >
                 <FileSpreadsheet className="w-4.5 h-4.5" />
                 <span>Export CSV</span>
               </button>
               <button 
-                onClick={() => alert('Compiling analytical dossier PDF report...')} 
+                onClick={() => showToast('Compiling analytical dossier PDF report...', 'success')} 
                 className="w-full py-2.5 border border-outline-variant rounded-lg flex items-center justify-center gap-2 font-mono text-[10px] text-on-surface-variant hover:text-primary hover:border-primary/50 transition-all font-bold uppercase bg-surface-container/30"
               >
                 <FileText className="w-4.5 h-4.5" />
                 <span>Export PDF Report</span>
               </button>
               <button 
-                onClick={() => alert('Serializing data model state as JSON object...')} 
+                onClick={() => showToast('Serializing data model state as JSON object...', 'success')} 
                 className="w-full py-2.5 border border-outline-variant rounded-lg flex items-center justify-center gap-2 font-mono text-[10px] text-on-surface-variant hover:text-primary hover:border-primary/50 transition-all font-bold uppercase bg-surface-container/30"
               >
                 <FileCode className="w-4.5 h-4.5" />
