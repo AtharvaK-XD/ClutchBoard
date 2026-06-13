@@ -10,6 +10,7 @@ import Insights from './pages/Insights';
 import Settings from './pages/Settings';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import PlayerProfile from './pages/PlayerProfile';
 
 import {
   initialRoster,
@@ -65,6 +66,7 @@ function App() {
       }>
         <Route path="/" element={<Overview />} />
         <Route path="/roster" element={<Roster />} />
+        <Route path="/player/:id" element={<PlayerProfile />} />
         <Route path="/matches" element={<Matches />} />
         <Route path="/rankings" element={<Rankings />} />
         <Route path="/schedule" element={<Schedule />} />

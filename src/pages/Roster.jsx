@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useNavigate } from 'react-router-dom';
 import { Search, X, ShieldAlert, Cpu } from 'lucide-react';
 import { 
   RadarChart, 
@@ -21,6 +21,7 @@ const compData = [
 
 const Roster = () => {
   const { roster, searchVal, onSearchChange } = useOutletContext();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('All');
 
   // Filter roster by tab and search
@@ -165,7 +166,7 @@ const Roster = () => {
               </div>
 
               <button 
-                onClick={() => alert(`Displaying player tactical dossier for ${p.name}...`)}
+                onClick={() => navigate(`/player/${p.id.toLowerCase()}`)}
                 className="w-full py-2 bg-primary/10 border border-primary/30 text-primary font-mono text-[9px] tracking-wider uppercase rounded-lg hover:bg-primary/20 transition-all font-bold"
               >
                 VIEW PROFILE
