@@ -1,5 +1,6 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { 
   LayoutDashboard, 
   Users, 
@@ -8,10 +9,20 @@ import {
   Calendar, 
   LineChart, 
   Settings, 
-  Radar 
+  Radar,
+  LogOut
 } from 'lucide-react';
 
+const MotionNavLink = motion(NavLink);
+
 const Sidebar = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('isAuthenticated');
+    navigate('/login');
+  };
+
   const navItems = [
     { to: '/', label: 'Overview', icon: LayoutDashboard },
     { to: '/roster', label: 'Roster', icon: Users },
@@ -37,9 +48,11 @@ const Sidebar = () => {
       {/* Navigation links */}
       <nav className="flex flex-col gap-2 flex-grow">
         {navItems.map((item) => (
-          <NavLink
+          <MotionNavLink
             key={item.to}
             to={item.to}
+            whileHover={{ x: 6 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
             className={({ isActive }) =>
               isActive
                 ? 'flex items-center gap-3 bg-secondary-container text-on-secondary-container rounded-lg px-4 py-3 border-l-4 border-primary scale-95 transition-all font-mono text-[12px] font-bold uppercase tracking-wider'
@@ -48,14 +61,16 @@ const Sidebar = () => {
           >
             <item.icon className="w-5 h-5 shrink-0" />
             <span>{item.label}</span>
-          </NavLink>
+          </MotionNavLink>
         ))}
       </nav>
 
       {/* Bottom sidebar section */}
       <div className="mt-auto flex flex-col gap-3 border-t border-outline-variant pt-6">
-        <NavLink
+        <MotionNavLink
           to="/settings"
+          whileHover={{ x: 6 }}
+          transition={{ type: "spring", stiffness: 400, damping: 25 }}
           className={({ isActive }) =>
             isActive
               ? 'flex items-center gap-3 bg-secondary-container text-on-secondary-container rounded-lg px-4 py-3 border-l-4 border-primary scale-95 transition-all font-mono text-[12px] font-bold uppercase tracking-wider'
@@ -64,16 +79,25 @@ const Sidebar = () => {
         >
           <Settings className="w-5 h-5 shrink-0" />
           <span>Settings</span>
-        </NavLink>
+        </MotionNavLink>
         
-        <div className="flex items-center gap-3 p-3 bg-surface-container rounded-lg border border-outline-variant">
-          <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary flex items-center justify-center font-mono text-primary text-[14px] font-bold shrink-0">
-            CR
+        <div className="flex items-center justify-between p-3 bg-surface-container rounded-lg border border-outline-variant transition-colors hover:border-primary/50 group">
+          <div className="flex items-center gap-3 truncate">
+            <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary flex items-center justify-center font-mono text-primary text-[14px] font-bold shrink-0">
+              CR
+            </div>
+            <div className="flex flex-col truncate">
+              <span className="text-xs font-bold text-on-surface">Coach Red</span>
+              <span className="font-mono text-[10px] text-on-surface-variant">Team Liquid Analyst</span>
+            </div>
           </div>
-          <div className="flex flex-col truncate">
-            <span className="text-xs font-bold text-on-surface">Coach Red</span>
-            <span className="font-mono text-[10px] text-on-surface-variant">Team Liquid Analyst</span>
-          </div>
+          <button 
+            onClick={handleLogout}
+            title="Log Out"
+            className="text-on-surface-variant hover:text-error transition-colors p-1"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
         </div>
       </div>
     </aside>

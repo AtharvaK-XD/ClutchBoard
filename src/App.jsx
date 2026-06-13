@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import Overview from './pages/Overview';
 import Roster from './pages/Roster';
@@ -8,6 +8,8 @@ import Rankings from './pages/Rankings';
 import Schedule from './pages/Schedule';
 import Insights from './pages/Insights';
 import Settings from './pages/Settings';
+import Login from './pages/Login';
+import Register from './pages/Register';
 
 import {
   initialRoster,
@@ -47,9 +49,20 @@ function App() {
     setSelectedMatchId
   };
 
+  const PrivateRoute = ({ children }) => {
+    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+    return isAuthenticated ? children : <Navigate to="/login" />;
+  };
+
   return (
     <Routes>
-      <Route element={<Layout contextValue={contextValue} />}>
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route element={
+        <PrivateRoute>
+          <Layout contextValue={contextValue} />
+        </PrivateRoute>
+      }>
         <Route path="/" element={<Overview />} />
         <Route path="/roster" element={<Roster />} />
         <Route path="/matches" element={<Matches />} />

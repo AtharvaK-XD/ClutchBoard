@@ -1,11 +1,20 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 
 const StatCard = ({ label, value, icon: Icon, subtext, glow = false, children }) => {
   return (
-    <div className={`bg-surface-container-lowest border border-outline-variant p-4 rounded-lg flex flex-col justify-between h-32 transition-all hover:border-primary/50 ${glow ? 'glow-cyan' : ''}`}>
+    <motion.div 
+      whileHover={{ scale: 1.02, y: -4 }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      className={`bg-surface-container-lowest border border-outline-variant p-4 rounded-lg flex flex-col justify-between h-32 transition-colors hover:border-primary/50 cursor-pointer ${glow ? 'glow-cyan' : ''}`}
+    >
       <div className="flex justify-between items-start">
         <span className="font-mono text-[12px] font-bold text-on-surface-variant tracking-wider uppercase">{label}</span>
-        {Icon && <Icon className={`w-[18px] h-[18px] ${glow ? 'text-primary' : 'text-on-surface-variant'}`} />}
+        {Icon && (
+          <motion.div whileHover={{ rotate: 15, scale: 1.1 }}>
+            <Icon className={`w-[18px] h-[18px] transition-colors ${glow ? 'text-primary' : 'text-on-surface-variant group-hover:text-primary'}`} />
+          </motion.div>
+        )}
       </div>
       <div className="flex items-end justify-between">
         <div className="flex flex-col">
@@ -18,7 +27,7 @@ const StatCard = ({ label, value, icon: Icon, subtext, glow = false, children })
         </div>
         {children}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

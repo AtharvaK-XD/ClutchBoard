@@ -18,8 +18,23 @@ import {
   Tooltip, 
   ResponsiveContainer 
 } from 'recharts';
+import { motion } from 'framer-motion';
 import StatCard from '../components/ui/StatCard';
 import Badge from '../components/ui/Badge';
+
+// Framer motion variants
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+};
 
 // Mock chart data representing win/loss trends over 30 days
 const chartData = [
@@ -68,9 +83,14 @@ const Overview = () => {
   };
 
   return (
-    <div className="space-y-8 animate-fadeIn">
+    <motion.div 
+      variants={containerVariants}
+      initial="hidden"
+      animate="show"
+      className="space-y-8"
+    >
       {/* KPI Row */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+      <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-5 gap-4">
         {/* Win Rate */}
         <StatCard 
           label="WIN RATE" 
@@ -126,10 +146,10 @@ const Overview = () => {
             <div className="w-6 h-6 rounded bg-primary/20 text-primary border border-primary/30 font-mono font-bold text-xs flex items-center justify-center select-none">W</div>
           </div>
         </StatCard>
-      </div>
+      </motion.div>
 
       {/* Bento Grid Layout */}
-      <div className="grid grid-cols-12 gap-4">
+      <motion.div variants={itemVariants} className="grid grid-cols-12 gap-4">
         {/* Performance Index Card */}
         <div className="col-span-12 lg:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-lg p-6 flex flex-col justify-between">
           <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-4">
@@ -311,15 +331,15 @@ const Overview = () => {
             </div>
             
             <button 
-              onClick={() => alert('Displaying player tactical dossier for Nats...')} 
+              onClick={() => navigate('/roster')} 
               className="w-full py-2.5 bg-primary/10 border border-primary/30 text-primary font-mono text-[10px] tracking-wider uppercase rounded-lg hover:bg-primary/20 transition-all font-bold mt-2"
             >
               VIEW PROFILE
             </button>
           </div>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 
