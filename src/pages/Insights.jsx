@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useNavigate } from 'react-router-dom';
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -10,12 +10,24 @@ import {
   Zap,
   Calculator
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Badge from '../components/ui/Badge';
 import AnimatedMap from '../components/ui/AnimatedMap';
 import AnimatedWeapon from '../components/ui/AnimatedWeapon';
 import { initialAgents } from '../data/state';
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { staggerChildren: 0.1 } }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+};
+
 const Insights = () => {
+  const navigate = useNavigate();
   // Economy Sim Local State
   const [credits, setCredits] = useState(3900);
   const [lossStreak, setLossStreak] = useState(2);
@@ -46,19 +58,24 @@ const Insights = () => {
   };
 
   return (
-    <div className="space-y-8 animate-fadeIn">
+    <motion.div 
+      variants={containerVariants}
+      initial="hidden"
+      animate="show"
+      className="space-y-8"
+    >
       {/* Header */}
-      <div className="flex flex-col gap-1 border-b border-outline-variant pb-6 select-none">
+      <motion.div variants={itemVariants} className="flex flex-col gap-1 border-b border-outline-variant pb-6 select-none">
         <h2 className="font-headline text-2xl font-extrabold text-primary uppercase">Tactical Insights</h2>
         <p className="text-xs text-on-surface-variant">
           Real-time algorithmic analysis of Team Liquid's performance architecture and opponent vulnerabilities
         </p>
-      </div>
+      </motion.div>
 
       {/* Alerts Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Card 1 */}
-        <div className="bg-surface-container-lowest border border-outline-variant p-6 rounded-xl overflow-hidden relative group flex flex-col justify-between h-48 hover:border-primary/50 transition-all glow-cyan">
+        <motion.div variants={itemVariants} className="bg-surface-container-lowest border border-outline-variant p-6 rounded-xl overflow-hidden relative group flex flex-col justify-between h-48 hover:border-primary/50 transition-all glow-cyan">
           <div className="absolute right-[-20px] top-[-20px] w-[180px] h-[180px] select-none opacity-20 group-hover:opacity-40 transition-opacity pointer-events-none">
             <AnimatedMap />
           </div>
@@ -70,15 +87,15 @@ const Insights = () => {
             Dominance established on <strong className="text-on-surface">Haven</strong> over the last 30 days. Defensive rotations are 12% faster than regional average.
           </p>
           <button 
-            onClick={() => alert('Opening Haven map analytics drilldown...')} 
+            onClick={() => navigate('/matches')} 
             className="text-primary font-mono text-[9px] tracking-wider font-bold text-left hover:underline uppercase"
           >
             EXPLORE MAP DATA
           </button>
-        </div>
+        </motion.div>
 
         {/* Card 2 */}
-        <div className="bg-surface-container-lowest border border-outline-variant p-6 rounded-xl overflow-hidden relative group flex flex-col justify-between h-48 hover:border-primary/50 transition-all glow-purple">
+        <motion.div variants={itemVariants} className="bg-surface-container-lowest border border-outline-variant p-6 rounded-xl overflow-hidden relative group flex flex-col justify-between h-48 hover:border-primary/50 transition-all glow-purple">
           <div className="absolute right-[-20px] bottom-[-20px] w-[180px] h-[180px] select-none opacity-20 group-hover:opacity-40 transition-opacity pointer-events-none">
             <AnimatedWeapon />
           </div>
@@ -90,15 +107,15 @@ const Insights = () => {
             Primary performance drop detected in <strong className="text-on-surface">pistol rounds</strong>. Headshot percentage remains stable, suggesting positioning issues.
           </p>
           <button 
-            onClick={() => alert('Opening Sayf player dashboard...')} 
+            onClick={() => navigate('/player/sayf')} 
             className="text-primary font-mono text-[9px] tracking-wider font-bold text-left hover:underline uppercase"
           >
             VIEW PLAYER REPORT
           </button>
-        </div>
+        </motion.div>
 
         {/* Card 3 */}
-        <div className="bg-surface-container-lowest border-l-4 border-primary p-6 rounded-xl overflow-hidden relative group flex flex-col justify-between h-48 hover:border-primary/50 border-y border-r border-outline-variant transition-all">
+        <motion.div variants={itemVariants} className="bg-surface-container-lowest border-l-4 border-primary p-6 rounded-xl overflow-hidden relative group flex flex-col justify-between h-48 hover:border-primary/50 border-y border-r border-outline-variant transition-all">
           <div className="absolute -right-4 -bottom-4 select-none opacity-5 group-hover:opacity-10 transition-transform">
             <Activity className="w-[100px] h-[100px] text-primary" />
           </div>
@@ -110,18 +127,18 @@ const Insights = () => {
             Fnatic loses B site 70% of rounds when playing against aggressive initiators. Recommend Breach/Fade composition.
           </p>
           <button 
-            onClick={() => alert('Opening Fnatic counter tactics checklist...')} 
+            onClick={() => navigate('/matches')} 
             className="text-primary font-mono text-[9px] tracking-wider font-bold text-left hover:underline uppercase"
           >
             STRATEGIC COUNTER
           </button>
-        </div>
+        </motion.div>
       </div>
 
       {/* Grid Comparisons */}
       <div className="grid grid-cols-12 gap-6 items-start">
         {/* Left Agent Table */}
-        <div className="col-span-12 lg:col-span-7 bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col gap-4">
+        <motion.div variants={itemVariants} className="col-span-12 lg:col-span-7 bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col gap-4">
           <div className="flex justify-between items-center border-b border-outline-variant/30 pb-2 select-none">
             <h3 className="font-headline text-sm text-primary font-bold uppercase">Agent Pick Rate Meta — EMEA</h3>
             <span className="text-[9px] font-mono text-on-surface-variant uppercase">Global Seeds</span>
@@ -162,10 +179,10 @@ const Insights = () => {
               </tbody>
             </table>
           </div>
-        </div>
+        </motion.div>
 
         {/* Right Head-to-Head */}
-        <div className="col-span-12 lg:col-span-5 flex flex-col gap-6">
+        <motion.div variants={itemVariants} className="col-span-12 lg:col-span-5 flex flex-col gap-6">
           <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col gap-4">
             <h3 className="font-headline text-sm text-on-surface font-bold uppercase select-none">Head to Head: Liquid vs Fnatic</h3>
             <div className="flex flex-col gap-4">
@@ -208,11 +225,11 @@ const Insights = () => {
               </p>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
 
       {/* Economy Simulation Widget */}
-      <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col gap-4">
+      <motion.div variants={itemVariants} className="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col gap-4">
         <div className="flex items-center gap-2 border-b border-outline-variant/30 pb-2 select-none">
           <Calculator className="text-primary w-5 h-5" />
           <h3 className="font-headline text-md text-primary font-bold uppercase">Round Economy Simulator</h3>
@@ -279,8 +296,8 @@ const Insights = () => {
             )}
           </div>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

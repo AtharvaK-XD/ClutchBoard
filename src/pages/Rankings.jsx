@@ -8,10 +8,23 @@ import {
   Award,
   Zap
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Badge from '../components/ui/Badge';
+import { useToast } from '../contexts/ToastContext';
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { staggerChildren: 0.05 } }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 15 },
+  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 350, damping: 25 } }
+};
 
 const Rankings = () => {
   const { rankings } = useOutletContext();
+  const { showToast } = useToast();
   const [regionFilter, setRegionFilter] = useState('EMEA');
 
   // Filter rankings by region
@@ -20,9 +33,14 @@ const Rankings = () => {
   });
 
   return (
-    <div className="space-y-8 animate-fadeIn">
+    <motion.div 
+      variants={containerVariants}
+      initial="hidden"
+      animate="show"
+      className="space-y-8"
+    >
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-outline-variant pb-6">
+      <motion.div variants={itemVariants} className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-outline-variant pb-6">
         <div>
           <h2 className="font-headline text-2xl font-extrabold text-primary uppercase select-none">Global Power Rankings</h2>
           <p className="text-xs text-on-surface-variant">Unified leaderboard of all competing professional teams</p>
@@ -47,12 +65,12 @@ const Rankings = () => {
             );
           })}
         </div>
-      </div>
+      </motion.div>
 
       {/* Layout Grid */}
       <div className="grid grid-cols-12 gap-6 items-start">
         {/* Leaderboard Table */}
-        <div className="col-span-12 lg:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden">
+        <motion.div variants={itemVariants} className="col-span-12 lg:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden">
           <div className="p-6 border-b border-outline-variant bg-surface-container/30 flex justify-between items-center select-none">
             <h3 className="font-headline text-md text-primary font-bold">{regionFilter} Elite Division</h3>
             <span className="text-[9px] font-mono text-on-surface-variant uppercase">Live Seed System</span>
@@ -108,10 +126,10 @@ const Rankings = () => {
               </tbody>
             </table>
           </div>
-        </div>
+        </motion.div>
 
         {/* Sidebar panels */}
-        <aside className="col-span-12 lg:col-span-4 flex flex-col gap-6">
+        <motion.div variants={itemVariants} className="col-span-12 lg:col-span-4 flex flex-col gap-6">
           {/* Liquid Spotlight */}
           <div className="bg-surface-container-lowest border-2 border-primary rounded-xl p-6 glow-cyan flex flex-col gap-3 relative overflow-hidden select-none">
             <div className="absolute -right-4 -bottom-4 opacity-5 pointer-events-none">
@@ -179,21 +197,21 @@ const Rankings = () => {
             <h4 className="font-mono text-[10px] font-bold text-on-surface-variant uppercase tracking-wider select-none">Tournament Division</h4>
             <div className="flex flex-col gap-2">
               <button 
-                onClick={() => alert('Filtering system for VCT Champions division...')} 
+                onClick={() => showToast('Filtering division: VCT Champions.', 'success')} 
                 className="w-full py-2.5 bg-surface-container border border-outline-variant hover:border-primary/50 text-left px-4 rounded font-mono text-xs text-on-surface hover:text-primary transition-all flex justify-between items-center"
               >
                 <span>VCT CHAMPIONS</span>
                 <ChevronRight className="w-4 h-4" />
               </button>
               <button 
-                onClick={() => alert('Filtering system for Masters Tokyo...')} 
+                onClick={() => showToast('Filtering division: Masters Tokyo.', 'success')} 
                 className="w-full py-2.5 bg-surface-container border border-outline-variant hover:border-primary/50 text-left px-4 rounded font-mono text-xs text-on-surface hover:text-primary transition-all flex justify-between items-center"
               >
                 <span>MASTERS TOKYO</span>
                 <ChevronRight className="w-4 h-4" />
               </button>
               <button 
-                onClick={() => alert('Filtering system for VCT EMEA...')} 
+                onClick={() => showToast('Filtering division: VCT EMEA.', 'success')} 
                 className="w-full py-2.5 bg-surface-container border border-outline-variant hover:border-primary/50 text-left px-4 rounded font-mono text-xs text-on-surface hover:text-primary transition-all flex justify-between items-center"
               >
                 <span>VCT EMEA</span>
@@ -201,9 +219,9 @@ const Rankings = () => {
               </button>
             </div>
           </div>
-        </aside>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

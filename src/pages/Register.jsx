@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Radar, Mail, Lock, Building, ArrowRight } from 'lucide-react';
+import { useToast } from '../contexts/ToastContext';
 
 const Register = () => {
   const navigate = useNavigate();
+  const { showToast } = useToast();
   const [teamName, setTeamName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -13,7 +15,7 @@ const Register = () => {
   const handleRegister = (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      showToast("Passwords do not match", "error");
       return;
     }
     localStorage.setItem('isAuthenticated', 'true');

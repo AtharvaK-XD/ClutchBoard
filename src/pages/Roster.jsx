@@ -9,7 +9,18 @@ import {
   Radar, 
   ResponsiveContainer 
 } from 'recharts';
+import { motion } from 'framer-motion';
 import Badge from '../components/ui/Badge';
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { staggerChildren: 0.05 } }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 15 },
+  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 350, damping: 25 } }
+};
 
 const compData = [
   { subject: 'ATTACK', A: 85, fullMark: 100 },
@@ -36,9 +47,14 @@ const Roster = () => {
   });
 
   return (
-    <div className="space-y-8 animate-fadeIn">
+    <motion.div 
+      variants={containerVariants}
+      initial="hidden"
+      animate="show"
+      className="space-y-8"
+    >
       {/* Top Banner */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-outline-variant pb-6">
+      <motion.div variants={itemVariants} className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-outline-variant pb-6">
         <div>
           <h2 className="font-headline text-2xl font-extrabold text-primary uppercase select-none">TEAM LIQUID</h2>
           <p className="text-xs text-on-surface-variant">Active roster analysis and technical ratings</p>
@@ -59,10 +75,10 @@ const Roster = () => {
             <span className="font-mono text-lg text-primary font-bold">Immortal 3</span>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Filters and Search Bar */}
-      <div className="flex flex-col md:flex-row justify-between gap-4">
+      <motion.div variants={itemVariants} className="flex flex-col md:flex-row justify-between gap-4">
         {/* Tabs */}
         <div className="flex gap-1 bg-surface-container border border-outline-variant p-[3px] rounded-lg w-fit">
           {['All', 'Starting 5', 'Substitute', 'Coach'].map(tab => {
@@ -102,17 +118,22 @@ const Roster = () => {
             </button>
           )}
         </div>
-      </div>
+      </motion.div>
 
       {/* Grid Content */}
       <div className="grid grid-cols-12 gap-6 items-start">
         {/* Player Cards */}
-        <div className="col-span-12 lg:col-span-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredRoster.map(p => (
-            <div 
+        <motion.div variants={itemVariants} className="col-span-12 lg:col-span-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredRoster.map((p, index) => (
+            <motion.div 
               key={p.id}
-              className="bg-surface-container-lowest border border-outline-variant p-4 rounded-xl flex flex-col justify-between gap-4 transition-all hover:border-primary/50"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: index * 0.05 }}
+              whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(57, 255, 20, 0.1)" }}
+              className="bg-surface-container-lowest border border-outline-variant p-4 rounded-xl flex flex-col justify-between gap-4 transition-colors hover:border-primary/50 relative overflow-hidden group"
             >
+              <div className="absolute -right-4 -top-4 w-16 h-16 bg-primary/5 rounded-full blur-xl group-hover:bg-primary/20 transition-all"></div>
               <div className="flex justify-between items-start">
                 <div className="flex items-center gap-3">
                   {/* Position number */}
@@ -171,7 +192,7 @@ const Roster = () => {
               >
                 VIEW PROFILE
               </button>
-            </div>
+            </motion.div>
           ))}
 
           {filteredRoster.length === 0 && (
@@ -180,10 +201,10 @@ const Roster = () => {
               <p className="font-bold text-sm text-on-surface">No players found matching current filter</p>
             </div>
           )}
-        </div>
+        </motion.div>
 
         {/* Composition analysis */}
-        <aside className="col-span-12 lg:col-span-4 flex flex-col gap-6">
+        <motion.div variants={itemVariants} className="col-span-12 lg:col-span-4 flex flex-col gap-6">
           <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col gap-4">
             <div>
               <h4 className="font-headline text-md text-primary font-bold uppercase">Team Composition</h4>
@@ -232,9 +253,9 @@ const Roster = () => {
               </p>
             </div>
           </div>
-        </aside>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
