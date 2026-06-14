@@ -5,8 +5,9 @@ const StatCard = ({ label, value, icon: Icon, subtext, glow = false, children })
   return (
     <motion.div 
       whileHover={{ scale: 1.02, y: -4 }}
+      whileTap={{ scale: 0.98 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      className={`bg-surface-container-lowest border border-outline-variant p-4 rounded-lg flex flex-col justify-between h-32 transition-colors hover:border-primary/50 cursor-pointer ${glow ? 'glow-cyan' : ''}`}
+      className={`bg-surface-container-lowest border border-outline-variant p-4 rounded-lg flex flex-col justify-between h-32 transition-colors hover:border-primary/50 cursor-pointer hover-glow ${glow ? 'glow-cyan' : ''}`}
     >
       <div className="flex justify-between items-start">
         <span className="font-mono text-[12px] font-bold text-on-surface-variant tracking-wider uppercase">{label}</span>

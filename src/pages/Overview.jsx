@@ -216,7 +216,11 @@ const Overview = () => {
         </div>
 
         {/* Match Spotlight Card */}
-        <div className="col-span-12 lg:col-span-4 bg-surface-container-lowest border-2 border-primary rounded-lg p-6 relative flex flex-col justify-between overflow-hidden glow-cyan">
+        <motion.div 
+          whileHover={{ scale: 1.01, y: -2 }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          className="col-span-12 lg:col-span-4 bg-surface-container-lowest border-2 border-primary rounded-lg p-6 relative flex flex-col justify-between overflow-hidden glow-cyan hover-glow"
+        >
           {/* Badge top-right */}
           <div className="absolute top-0 right-0 bg-primary text-black font-mono text-[9px] font-bold px-3 py-1 rounded-bl-lg tracking-wider uppercase select-none">
             LIVE IN {countdown.hours}H {countdown.minutes}M
@@ -258,7 +262,7 @@ const Overview = () => {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Recent Matches Table */}
         <div className="col-span-12 lg:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-lg p-6 flex flex-col gap-4">
@@ -307,7 +311,11 @@ const Overview = () => {
         {/* Player Spotlight Panels */}
         <div className="col-span-12 lg:col-span-4 flex flex-col gap-4">
           {/* MVP Card */}
-          <div className="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 flex-1 relative overflow-hidden group flex flex-col justify-between gap-4 transition-all hover:border-primary/50">
+          <motion.div 
+            whileHover={{ scale: 1.01, y: -2 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 flex-1 relative overflow-hidden group flex flex-col justify-between gap-4 transition-all hover:border-primary/50 hover-glow"
+          >
             <div className="absolute -right-4 -bottom-4 select-none opacity-5 transition-transform group-hover:scale-110">
               <Award className="w-[120px] h-[120px] text-primary" />
             </div>
@@ -340,7 +348,7 @@ const Overview = () => {
             >
               VIEW PROFILE
             </button>
-          </div>
+          </motion.div>
         </div>
       </motion.div>
     </motion.div>
