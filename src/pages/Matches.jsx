@@ -33,6 +33,7 @@ const Matches = () => {
   const [opponentFilter, setOpponentFilter] = useState('All Opponents');
   const [mapFilter, setMapFilter] = useState('All Maps');
   const [resultFilter, setResultFilter] = useState('All Results');
+  const [hoveredKill, setHoveredKill] = useState(null);
 
   // Extract unique items for dropdowns
   const tournaments = ['All Tournaments', ...new Set(matches.map(m => m.tournament))];
@@ -327,18 +328,49 @@ const Matches = () => {
 
                 {/* Plotted heatmap dots */}
                 {activeMatch.kills.map((k, idx) => {
-                  const dotColor = k.team === 'TL' 
+                  const isTL = k.team === 'TL';
+                  const dotColor = isTL 
                     ? 'bg-primary shadow-[0_0_8px_#39FF14]' 
                     : 'bg-error shadow-[0_0_8px_#FF4D67]';
                   return (
                     <div 
                       key={idx}
-                      className={`absolute w-2 h-2 rounded-full ${dotColor} transform -translate-x-1/2 -translate-y-1/2 cursor-crosshair`}
+                      onMouseEnter={() => setHoveredKill({ ...k, idx })}
+                      onMouseLeave={() => setHoveredKill(null)}
+                      className={`absolute w-3 h-3 rounded-full ${dotColor} transform -translate-x-1/2 -translate-y-1/2 cursor-crosshair hover:scale-150 transition-transform z-10`}
                       style={{ left: `${k.x}%`, top: `${k.y}%` }}
-                      title={`Kill by ${k.team}`}
                     ></div>
                   );
                 })}
+
+                {/* Heatmap Tooltip */}
+                <AnimatePresence>
+                  {hoveredKill && hoveredKill.killer && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      className="absolute bg-surface-container-high border border-outline-variant p-3 rounded-lg shadow-xl pointer-events-none z-20 flex flex-col gap-2 min-w-[150px]"
+                      style={{ 
+                        left: `calc(${hoveredKill.x}% + 10px)`, 
+                        top: `calc(${hoveredKill.y}% - 40px)`
+                      }}
+                    >
+                      <div className="flex justify-between items-center border-b border-outline-variant/30 pb-1">
+                        <span className="font-mono text-[9px] text-on-surface-variant uppercase font-bold">Time: {hoveredKill.time}</span>
+                        <Crosshair className="w-3 h-3 text-on-surface-variant" />
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className={`font-bold text-sm ${hoveredKill.team === 'TL' ? 'text-primary' : 'text-error'}`}>{hoveredKill.killer}</span>
+                        <span className="font-mono text-[10px] text-on-surface-variant italic">killed</span>
+                        <span className={`font-bold text-sm ${hoveredKill.team === 'TL' ? 'text-error' : 'text-primary'}`}>{hoveredKill.victim}</span>
+                      </div>
+                      <div className="bg-surface border border-outline-variant rounded px-2 py-1 flex items-center justify-center mt-1">
+                        <span className="font-mono text-[10px] text-on-surface uppercase font-bold">{hoveredKill.weapon}</span>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
           </motion.div>

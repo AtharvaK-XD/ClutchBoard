@@ -19,7 +19,7 @@ import {
   Tooltip, 
   ResponsiveContainer 
 } from 'recharts';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import StatCard from '../components/ui/StatCard';
 import Badge from '../components/ui/Badge';
 import { useToast } from '../contexts/ToastContext';
@@ -54,30 +54,50 @@ const Overview = () => {
   const { matches, setSelectedMatchId } = useOutletContext();
   const { showToast } = useToast();
   
-  // Countdown state: 2 hours, 15 minutes, 0 seconds
-  const [countdown, setCountdown] = useState({ hours: 2, minutes: 15, seconds: 0 });
+  // Live Match State Simulation
+  const [liveScore, setLiveScore] = useState({ tl: 10, opp: 11 });
+  const [killfeed, setKillfeed] = useState([]);
+  const [roundTime, setRoundTime] = useState(45);
 
   useEffect(() => {
+    // Round timer
     const timer = setInterval(() => {
-      setCountdown(prev => {
-        if (prev.seconds > 0) {
-          return { ...prev, seconds: prev.seconds - 1 };
-        } else {
-          if (prev.minutes > 0) {
-            return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
-          } else {
-            if (prev.hours > 0) {
-              return { hours: prev.hours - 1, minutes: 59, seconds: 59 };
-            } else {
-              // Reset loop for simulation persistence
-              return { hours: 2, minutes: 15, seconds: 0 };
-            }
-          }
-        }
+      setRoundTime(prev => {
+        if (prev <= 0) return 100; // Reset round
+        return prev - 1;
       });
     }, 1000);
 
-    return () => clearInterval(timer);
+    // Random killfeed generator
+    const playersTL = ['Nats', 'Sayf', 'TenZ', 'Jamppi', 'Redgar'];
+    const playersFN = ['Boaster', 'Derke', 'Alfajer', 'Chronicle', 'Leo'];
+    const weapons = ['Vandal', 'Phantom', 'Operator', 'Sheriff'];
+
+    const killInterval = setInterval(() => {
+      if (Math.random() > 0.6) {
+        const isTLKiller = Math.random() > 0.5;
+        const killer = isTLKiller ? playersTL[Math.floor(Math.random() * playersTL.length)] : playersFN[Math.floor(Math.random() * playersFN.length)];
+        const victim = isTLKiller ? playersFN[Math.floor(Math.random() * playersFN.length)] : playersTL[Math.floor(Math.random() * playersTL.length)];
+        const weapon = weapons[Math.floor(Math.random() * weapons.length)];
+        const newKill = { id: Date.now(), killer, victim, weapon, team: isTLKiller ? 'TL' : 'FN' };
+        
+        setKillfeed(prev => [newKill, ...prev].slice(0, 4));
+      }
+    }, 3500);
+
+    // Score updater
+    const scoreInterval = setInterval(() => {
+      setLiveScore(prev => {
+        const t = Math.random() > 0.5 ? 'tl' : 'opp';
+        return { ...prev, [t]: prev[t] + 1 };
+      });
+    }, 25000);
+
+    return () => {
+      clearInterval(timer);
+      clearInterval(killInterval);
+      clearInterval(scoreInterval);
+    };
   }, []);
 
   const handleMatchDetails = (id) => {
@@ -222,8 +242,8 @@ const Overview = () => {
           className="col-span-12 lg:col-span-4 bg-surface-container-lowest border-2 border-primary rounded-lg p-6 relative flex flex-col justify-between overflow-hidden glow-cyan hover-glow"
         >
           {/* Badge top-right */}
-          <div className="absolute top-0 right-0 bg-primary text-black font-mono text-[9px] font-bold px-3 py-1 rounded-bl-lg tracking-wider uppercase select-none">
-            LIVE IN {countdown.hours}H {countdown.minutes}M
+          <div className="absolute top-0 right-0 bg-error text-white font-mono text-[9px] font-bold px-3 py-1 rounded-bl-lg tracking-wider uppercase select-none animate-pulse">
+            LIVE MATCH
           </div>
 
           <div className="mt-2">
@@ -244,22 +264,39 @@ const Overview = () => {
             </div>
           </div>
 
-          {/* Countdown card nesting */}
-          <div className="bg-surface-container border border-outline-variant rounded-lg p-4">
-            <div className="text-[10px] font-mono text-on-surface-variant tracking-wider uppercase mb-2">VCT EMEA: Stage 2</div>
-            <div className="flex gap-2">
-              <div className="w-full flex-1 flex flex-col items-center p-2 bg-surface-container-highest rounded border border-outline-variant/30">
-                <span className="font-mono text-xl text-primary font-extrabold">{String(countdown.hours).padStart(2, '0')}</span>
-                <span className="text-[8px] font-mono text-on-surface-variant uppercase">HOURS</span>
+          {/* Live Match Telemetry Nesting */}
+          <div className="bg-surface-container border border-outline-variant rounded-lg p-3 flex flex-col gap-3">
+            <div className="flex justify-between items-center">
+              <div className="text-[10px] font-mono text-on-surface-variant tracking-wider uppercase">Live Score</div>
+              <div className="text-[10px] font-mono text-error uppercase font-bold flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-error animate-ping absolute"></span>
+                <span className="w-1.5 h-1.5 rounded-full bg-error relative"></span> Live
               </div>
-              <div className="w-full flex-1 flex flex-col items-center p-2 bg-surface-container-highest rounded border border-outline-variant/30">
-                <span className="font-mono text-xl text-primary font-extrabold">{String(countdown.minutes).padStart(2, '0')}</span>
-                <span className="text-[8px] font-mono text-on-surface-variant uppercase">MIN</span>
-              </div>
-              <div className="w-full flex-1 flex flex-col items-center p-2 bg-surface-container-highest rounded border border-outline-variant/30 animate-pulse">
-                <span className="font-mono text-xl text-primary font-extrabold">{String(countdown.seconds).padStart(2, '0')}</span>
-                <span className="text-[8px] font-mono text-on-surface-variant uppercase">SEC</span>
-              </div>
+            </div>
+            
+            <div className="flex justify-between items-center bg-surface-container-highest rounded px-4 py-2 border border-outline-variant/30">
+              <span className="font-mono text-3xl text-primary font-extrabold">{liveScore.tl}</span>
+              <span className="font-mono text-xs text-on-surface-variant uppercase">{roundTime}s</span>
+              <span className="font-mono text-3xl text-error font-extrabold">{liveScore.opp}</span>
+            </div>
+
+            <div className="flex flex-col gap-1 mt-1 h-[88px] overflow-hidden relative">
+              <div className="absolute inset-x-0 bottom-0 h-6 bg-gradient-to-t from-surface-container to-transparent z-10 pointer-events-none"></div>
+              <AnimatePresence>
+                {killfeed.map(k => (
+                  <motion.div 
+                    key={k.id}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0 }}
+                    className="flex justify-between items-center text-[10px] font-mono bg-surface-container-highest/50 px-2 py-1.5 rounded border border-outline-variant/20"
+                  >
+                    <span className={`font-bold ${k.team === 'TL' ? 'text-primary' : 'text-error'}`}>{k.killer}</span>
+                    <span className="text-on-surface-variant text-[8px] uppercase">[{k.weapon}]</span>
+                    <span className={`font-bold ${k.team === 'TL' ? 'text-error' : 'text-primary'}`}>{k.victim}</span>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             </div>
           </div>
         </motion.div>

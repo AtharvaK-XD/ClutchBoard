@@ -23,9 +23,15 @@ export const initialMatches = [
     roundsLost: 11,
     roundsTimeline: ['W', 'W', 'L', 'W', 'L', 'L', 'W', 'W', 'W', 'L', 'L', 'W', 'L', 'W', 'L', 'W', 'W', 'L', 'L', 'W', 'L', 'L', 'W', 'W'],
     kills: [
-      { x: 30, y: 40, team: 'TL' }, { x: 35, y: 45, team: 'TL' }, { x: 70, y: 80, team: 'FN' },
-      { x: 20, y: 65, team: 'TL' }, { x: 80, y: 30, team: 'FN' }, { x: 50, y: 55, team: 'TL' },
-      { x: 45, y: 50, team: 'TL' }, { x: 85, y: 25, team: 'FN' }, { x: 60, y: 70, team: 'TL' }
+      { x: 30, y: 40, team: 'TL', killer: 'Nats', victim: 'Boaster', weapon: 'Vandal', time: '1:12' },
+      { x: 35, y: 45, team: 'TL', killer: 'Sayf', victim: 'Derke', weapon: 'Phantom', time: '1:05' },
+      { x: 70, y: 80, team: 'FN', killer: 'Alfajer', victim: 'TenZ', weapon: 'Sheriff', time: '0:58' },
+      { x: 20, y: 65, team: 'TL', killer: 'Jamppi', victim: 'Leo', weapon: 'Operator', time: '0:45' },
+      { x: 80, y: 30, team: 'FN', killer: 'Chronicle', victim: 'Redgar', weapon: 'Vandal', time: '0:40' },
+      { x: 50, y: 55, team: 'TL', killer: 'Nats', victim: 'Chronicle', weapon: 'Vandal', time: '0:32' },
+      { x: 45, y: 50, team: 'TL', killer: 'TenZ', victim: 'Alfajer', weapon: 'Blade Storm', time: '0:21' },
+      { x: 85, y: 25, team: 'FN', killer: 'Boaster', victim: 'Sayf', weapon: 'Phantom', time: '0:15' },
+      { x: 60, y: 70, team: 'TL', killer: 'Jamppi', victim: 'Boaster', weapon: 'Classic', time: '0:05' }
     ],
     rosterPerformance: [
       { name: 'Nats', agent: 'Cypher', acs: '256', k: '22', d: '12', a: '8', hs: '28%', adr: '162', kda: '2.50' },
@@ -49,8 +55,12 @@ export const initialMatches = [
     roundsLost: 7,
     roundsTimeline: ['W', 'W', 'W', 'L', 'W', 'L', 'W', 'W', 'L', 'W', 'W', 'L', 'L', 'W', 'L', 'W', 'W', 'W', 'L', 'W'],
     kills: [
-      { x: 40, y: 30, team: 'TL' }, { x: 55, y: 35, team: 'TL' }, { x: 65, y: 75, team: 'G2' },
-      { x: 30, y: 55, team: 'TL' }, { x: 75, y: 40, team: 'G2' }, { x: 45, y: 45, team: 'TL' }
+      { x: 40, y: 30, team: 'TL', killer: 'TenZ', victim: 'JonahP', weapon: 'Operator', time: '1:20' }, 
+      { x: 55, y: 35, team: 'TL', killer: 'Sayf', victim: 'Trent', weapon: 'Vandal', time: '0:55' }, 
+      { x: 65, y: 75, team: 'G2', killer: 'Valyn', victim: 'Nats', weapon: 'Phantom', time: '0:50' },
+      { x: 30, y: 55, team: 'TL', killer: 'Jamppi', victim: 'Leaf', weapon: 'Sheriff', time: '0:40' }, 
+      { x: 75, y: 40, team: 'G2', killer: 'Net', victim: 'Redgar', weapon: 'Spectre', time: '0:35' }, 
+      { x: 45, y: 45, team: 'TL', killer: 'TenZ', victim: 'Net', weapon: 'Vandal', time: '0:20' }
     ],
     rosterPerformance: [
       { name: 'TenZ', agent: 'Jett', acs: '298', k: '24', d: '10', a: '3', hs: '34%', adr: '185', kda: '2.70' },

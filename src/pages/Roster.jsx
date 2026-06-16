@@ -22,18 +22,63 @@ const itemVariants = {
   show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 350, damping: 25 } }
 };
 
-const compData = [
-  { subject: 'ATTACK', A: 85, fullMark: 100 },
-  { subject: 'DEFENSE', A: 90, fullMark: 100 },
-  { subject: 'UTILITY', A: 75, fullMark: 100 },
-  { subject: 'FRAGGING', A: 82, fullMark: 100 },
-  { subject: 'IGL', A: 70, fullMark: 100 }
-];
+
 
 const Roster = () => {
   const { roster, searchVal, onSearchChange } = useOutletContext();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('All');
+  const [selectedLineup, setSelectedLineup] = useState(roster.slice(0, 5));
+
+  const togglePlayer = (player) => {
+    setSelectedLineup(prev => {
+      if (prev.find(p => p.id === player.id)) {
+        return prev.filter(p => p.id !== player.id);
+      }
+      if (prev.length < 5) {
+        return [...prev, player];
+      }
+      return prev; // Max 5 players
+    });
+  };
+
+  const calculateRadarData = () => {
+    if (selectedLineup.length === 0) {
+      return [
+        { subject: 'ATTACK', A: 0, fullMark: 100 },
+        { subject: 'DEFENSE', A: 0, fullMark: 100 },
+        { subject: 'UTILITY', A: 0, fullMark: 100 },
+        { subject: 'FRAGGING', A: 0, fullMark: 100 },
+        { subject: 'IGL', A: 0, fullMark: 100 }
+      ];
+    }
+    
+    let attack = 0, defense = 0, utility = 0, fragging = 0, igl = 0;
+    
+    selectedLineup.forEach(p => {
+      const isDuelist = p.role.includes('Duelist');
+      const isSentinel = p.role.includes('Sentinel');
+      const isController = p.role.includes('Controller');
+      const isInitiator = p.role.includes('Initiator');
+      const isIGL = p.role.includes('IGL');
+      
+      attack += isDuelist ? 25 : isInitiator ? 15 : 10;
+      defense += isSentinel ? 25 : isController ? 20 : 10;
+      utility += isController ? 25 : isInitiator ? 20 : 10;
+      fragging += (Number(p.acs) / 300) * 20; 
+      igl += isIGL ? 40 : 10;
+    });
+
+    return [
+      { subject: 'ATTACK', A: Math.min(100, Math.round(attack)), fullMark: 100 },
+      { subject: 'DEFENSE', A: Math.min(100, Math.round(defense)), fullMark: 100 },
+      { subject: 'UTILITY', A: Math.min(100, Math.round(utility)), fullMark: 100 },
+      { subject: 'FRAGGING', A: Math.min(100, Math.round(fragging)), fullMark: 100 },
+      { subject: 'IGL', A: Math.min(100, Math.round(igl)), fullMark: 100 }
+    ];
+  };
+
+  const currentCompData = calculateRadarData();
 
   // Filter roster by tab and search
   const filteredRoster = roster.filter(player => {
@@ -186,12 +231,24 @@ const Roster = () => {
                 <div className="w-full h-1 bg-primary rounded-full"></div>
               </div>
 
-              <button 
-                onClick={() => navigate(`/player/${p.id.toLowerCase()}`)}
-                className="w-full py-2 bg-primary/10 border border-primary/30 text-primary font-mono text-[9px] tracking-wider uppercase rounded-lg hover:bg-primary/20 transition-all font-bold"
-              >
-                VIEW PROFILE
-              </button>
+              <div className="flex gap-2 mt-2">
+                <button 
+                  onClick={() => navigate(`/player/${p.id.toLowerCase()}`)}
+                  className="w-full py-2 bg-primary/10 border border-primary/30 text-primary font-mono text-[9px] tracking-wider uppercase rounded-lg hover:bg-primary/20 transition-all font-bold btn-animated"
+                >
+                  PROFILE
+                </button>
+                <button 
+                  onClick={() => togglePlayer(p)}
+                  className={`w-full py-2 border font-mono text-[9px] tracking-wider uppercase rounded-lg transition-all font-bold ${
+                    selectedLineup.find(s => s.id === p.id) 
+                      ? 'bg-error/10 border-error/30 text-error hover:bg-error/20' 
+                      : 'bg-surface-variant border-outline-variant text-on-surface hover:bg-surface-container-high'
+                  }`}
+                >
+                  {selectedLineup.find(s => s.id === p.id) ? 'REMOVE' : 'ADD'}
+                </button>
+              </div>
             </motion.div>
           ))}
 
@@ -209,12 +266,17 @@ const Roster = () => {
             <div>
               <h4 className="font-headline text-md text-primary font-bold uppercase">Team Composition</h4>
               <p className="text-xs text-on-surface-variant">Stat balance across roster dimensions</p>
+              <div className="text-[10px] font-mono mt-1 font-bold">
+                <span className={selectedLineup.length === 5 ? 'text-primary' : 'text-error animate-pulse'}>
+                  {selectedLineup.length}/5 Selected
+                </span>
+              </div>
             </div>
 
             {/* Radar Comp chart */}
             <div className="w-full h-56 flex items-center justify-center bg-surface/40 border border-outline-variant/30 rounded-lg overflow-hidden py-4">
               <ResponsiveContainer width="100%" height="100%">
-                <RadarChart cx="50%" cy="50%" outerRadius="75%" data={compData}>
+                <RadarChart cx="50%" cy="50%" outerRadius="75%" data={currentCompData}>
                   <PolarGrid stroke="#2D333B" />
                   <PolarAngleAxis 
                     dataKey="subject" 
