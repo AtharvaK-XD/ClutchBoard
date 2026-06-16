@@ -36,7 +36,7 @@ const Sidebar = () => {
     <aside className="fixed left-0 top-0 h-full w-[280px] bg-surface-container-low border-r border-outline-variant flex flex-col p-6 gap-8 z-50">
       {/* Brand Info */}
       <div className="flex flex-col gap-1 select-none">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 hover-scale cursor-default">
           <Radar className="text-primary w-8 h-8 animate-pulse shrink-0" />
           <h1 className="font-headline text-2xl font-extrabold text-primary tracking-tighter">
             CLUTCHBOARD

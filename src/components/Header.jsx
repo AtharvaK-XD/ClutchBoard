@@ -59,7 +59,7 @@ const Header = ({ searchVal, onSearchChange }) => {
         <div className="relative">
           <button
             onClick={() => { setShowNotifications(!showNotifications); setShowTeamSwitcher(false); setShowProfileMenu(false); }}
-            className="relative w-8 h-8 rounded-full hover:bg-surface-variant flex items-center justify-center text-on-surface transition-colors"
+            className="relative w-8 h-8 rounded-full hover:bg-surface-variant flex items-center justify-center text-on-surface transition-colors hover-scale"
           >
             <Bell className="w-5 h-5" />
             <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-primary animate-ping"></span>
@@ -95,7 +95,7 @@ const Header = ({ searchVal, onSearchChange }) => {
         <div className="relative">
           <button 
             onClick={() => { setShowTeamSwitcher(!showTeamSwitcher); setShowNotifications(false); setShowProfileMenu(false); }} 
-            className="bg-primary-container text-on-primary-container px-4 py-1.5 rounded-lg font-mono text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 hover:opacity-90 active:scale-95 transition-all"
+            className="bg-primary-container text-on-primary-container px-4 py-1.5 rounded-lg font-mono text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 hover:opacity-90 active:scale-95 transition-all btn-animated"
           >
             <span>TEAM SWITCHER</span>
             <ArrowRightLeft className="w-3.5 h-3.5" />
@@ -126,7 +126,7 @@ const Header = ({ searchVal, onSearchChange }) => {
         <div className="relative">
           <div 
             onClick={() => { setShowProfileMenu(!showProfileMenu); setShowNotifications(false); setShowTeamSwitcher(false); }}
-            className="w-8 h-8 rounded-full bg-surface-container-highest border border-outline-variant overflow-hidden select-none cursor-pointer hover:border-primary transition-colors"
+            className="w-8 h-8 rounded-full bg-surface-container-highest border border-outline-variant overflow-hidden select-none cursor-pointer hover:border-primary transition-colors hover-scale"
           >
             <div className="w-full h-full bg-gradient-to-tr from-primary/30 to-primary flex items-center justify-center text-on-primary font-bold text-[13px] font-mono">
               CR

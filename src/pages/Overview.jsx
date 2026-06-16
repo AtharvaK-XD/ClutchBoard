@@ -154,7 +154,7 @@ const Overview = () => {
       {/* Bento Grid Layout */}
       <motion.div variants={itemVariants} className="grid grid-cols-12 gap-4">
         {/* Performance Index Card */}
-        <div className="col-span-12 lg:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-lg p-6 flex flex-col justify-between">
+        <div className="col-span-12 lg:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-lg p-6 flex flex-col justify-between card-hover-fx">
           <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-4">
             <div>
               <h3 className="font-headline text-lg text-primary font-bold">Performance Index</h3>
@@ -265,7 +265,7 @@ const Overview = () => {
         </motion.div>
 
         {/* Recent Matches Table */}
-        <div className="col-span-12 lg:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-lg p-6 flex flex-col gap-4">
+        <div className="col-span-12 lg:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-lg p-6 flex flex-col gap-4 card-hover-fx">
           <div className="flex justify-between items-center">
             <h3 class="font-headline text-lg text-on-surface font-bold">Recent Matches</h3>
             <button 
