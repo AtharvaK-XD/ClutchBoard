@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import AnimatedNumber from './AnimatedNumber';
 
 const StatCard = ({ label, value, icon: Icon, subtext, glow = false, children }) => {
   return (
@@ -19,7 +20,7 @@ const StatCard = ({ label, value, icon: Icon, subtext, glow = false, children })
       </div>
       <div className="flex items-end justify-between">
         <div className="flex flex-col">
-          <span className="font-headline text-2xl text-on-background font-extrabold leading-none">{value}</span>
+          <AnimatedNumber value={value} className="font-headline text-2xl text-on-background font-extrabold leading-none" />
           {subtext && (
             <span className={`text-[10px] font-mono uppercase mt-1 ${subtext.startsWith('+') || subtext.includes('4W') ? 'text-primary' : 'text-on-surface-variant'}`}>
               {subtext}

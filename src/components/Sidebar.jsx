@@ -15,6 +15,16 @@ import {
 
 const MotionNavLink = motion(NavLink);
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, x: -20 },
+  show: { opacity: 1, x: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+};
+
 const Sidebar = () => {
   const navigate = useNavigate();
 
@@ -46,13 +56,18 @@ const Sidebar = () => {
       </div>
 
       {/* Navigation links */}
-      <nav className="flex flex-col gap-2 flex-grow">
+      <motion.nav 
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+        className="flex flex-col gap-2 flex-grow"
+      >
         {navItems.map((item) => (
           <MotionNavLink
             key={item.to}
             to={item.to}
+            variants={itemVariants}
             whileHover={{ x: 6 }}
-            transition={{ type: "spring", stiffness: 400, damping: 25 }}
             className={({ isActive }) =>
               isActive
                 ? 'flex items-center gap-3 bg-secondary-container text-on-secondary-container rounded-lg px-4 py-3 border-l-4 border-primary scale-95 transition-all font-mono text-[12px] font-bold uppercase tracking-wider'
@@ -63,7 +78,7 @@ const Sidebar = () => {
             <span>{item.label}</span>
           </MotionNavLink>
         ))}
-      </nav>
+      </motion.nav>
 
       {/* Bottom sidebar section */}
       <div className="mt-auto flex flex-col gap-3 border-t border-outline-variant pt-6">
