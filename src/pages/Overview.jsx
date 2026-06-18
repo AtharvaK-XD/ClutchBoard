@@ -172,9 +172,15 @@ const Overview = () => {
       </motion.div>
 
       {/* Bento Grid Layout */}
-      <motion.div variants={itemVariants} className="grid grid-cols-12 gap-4">
+      <motion.div 
+        variants={containerVariants} 
+        initial="hidden" 
+        whileInView="show" 
+        viewport={{ once: true, amount: 0.1 }}
+        className="grid grid-cols-12 gap-4"
+      >
         {/* Performance Index Card */}
-        <div className="col-span-12 lg:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-lg p-6 flex flex-col justify-between card-hover-fx">
+        <motion.div variants={itemVariants} className="col-span-12 lg:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-lg p-6 flex flex-col justify-between card-hover-fx">
           <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-4">
             <div>
               <h3 className="font-headline text-lg text-primary font-bold">Performance Index</h3>
@@ -233,10 +239,11 @@ const Overview = () => {
               </AreaChart>
             </ResponsiveContainer>
           </div>
-        </div>
+        </motion.div>
 
         {/* Match Spotlight Card */}
         <motion.div 
+          variants={itemVariants}
           whileHover={{ scale: 1.01, y: -2 }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
           className="col-span-12 lg:col-span-4 bg-surface-container-lowest border-2 border-primary rounded-lg p-6 relative flex flex-col justify-between overflow-hidden glow-cyan hover-glow"
@@ -302,7 +309,7 @@ const Overview = () => {
         </motion.div>
 
         {/* Recent Matches Table */}
-        <div className="col-span-12 lg:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-lg p-6 flex flex-col gap-4 card-hover-fx">
+        <motion.div variants={itemVariants} className="col-span-12 lg:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-lg p-6 flex flex-col gap-4 card-hover-fx">
           <div className="flex justify-between items-center">
             <h3 class="font-headline text-lg text-on-surface font-bold">Recent Matches</h3>
             <button 
@@ -346,12 +353,13 @@ const Overview = () => {
               </motion.div>
             ))}
           </motion.div>
-        </div>
+        </motion.div>
 
         {/* Player Spotlight Panels */}
         <div className="col-span-12 lg:col-span-4 flex flex-col gap-4">
           {/* MVP Card */}
           <motion.div 
+            variants={itemVariants}
             whileHover={{ scale: 1.01, y: -2 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
             className="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 flex-1 relative overflow-hidden group flex flex-col justify-between gap-4 transition-all hover:border-primary/50 hover-glow"
