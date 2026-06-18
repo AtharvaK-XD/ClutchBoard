@@ -313,10 +313,13 @@ const Overview = () => {
             </button>
           </div>
 
-          <div className="flex flex-col gap-3">
+          <motion.div variants={containerVariants} initial="hidden" animate="show" className="flex flex-col gap-3">
             {matches.slice(0, 3).map((m) => (
-              <div 
+              <motion.div 
                 key={m.id}
+                variants={itemVariants}
+                whileHover={{ scale: 1.01, x: 4 }}
+                transition={{ type: "spring", stiffness: 400 }}
                 className="grid grid-cols-12 items-center p-4 bg-surface-container border border-outline-variant rounded hover:bg-surface-container-high transition-colors gap-2"
               >
                 <div className="col-span-4 flex items-center gap-3">
@@ -340,9 +343,9 @@ const Overview = () => {
                     DETAILS
                   </button>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
 
         {/* Player Spotlight Panels */}

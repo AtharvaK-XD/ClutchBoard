@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Badge from '../components/ui/Badge';
+import ScrambledText from '../components/ui/ScrambledText';
 import { useToast } from '../contexts/ToastContext';
 
 const containerVariants = {
@@ -65,7 +66,9 @@ const Matches = () => {
       {/* Top Header */}
       <motion.div variants={itemVariants} className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-outline-variant pb-6">
         <div>
-          <h2 className="font-headline text-2xl font-extrabold text-primary uppercase select-none">Match History</h2>
+          <h2 className="font-headline text-2xl font-extrabold text-primary uppercase select-none">
+            <ScrambledText text="Match History" />
+          </h2>
           <p className="text-xs text-on-surface-variant">Analyze performance trends and tactical breakdowns for Team Liquid</p>
         </div>
         <div className="flex gap-2">
@@ -133,11 +136,13 @@ const Matches = () => {
       {/* Main Viewport */}
       <div className="grid grid-cols-12 gap-6 items-start">
         {/* Left scrollable match listing */}
-        <motion.div variants={itemVariants} className="col-span-12 lg:col-span-4 flex flex-col gap-3 max-h-[920px] overflow-y-auto custom-scrollbar pr-1">
+        <motion.div variants={containerVariants} className="col-span-12 lg:col-span-4 flex flex-col gap-3 max-h-[920px] overflow-y-auto custom-scrollbar pr-1">
           {filteredMatches.map(m => {
             const isSelected = m.id === activeMatch?.id;
             return (
-              <div 
+              <motion.div 
+                variants={itemVariants}
+                whileHover={{ scale: 1.01, x: 2 }}
                 key={m.id}
                 onClick={() => setSelectedMatchId(m.id)}
                 className={`rounded-xl p-4 flex flex-col justify-between gap-3 cursor-pointer select-none transition-all relative ${
@@ -165,7 +170,7 @@ const Matches = () => {
                 <div>
                   <Badge type={m.type}>{m.type}</Badge>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
           
@@ -310,8 +315,8 @@ const Matches = () => {
                 <span className="font-mono text-xs text-on-surface-variant uppercase">TACTICAL ANALYSIS OVERLAY</span>
               </div>
               
-              <div className="w-full h-80 bg-surface-container-lowest border border-outline-variant/60 rounded-xl relative overflow-hidden flex items-center justify-center">
-                <div className="absolute inset-0 grid-pattern opacity-40"></div>
+              <div className="w-full h-80 bg-surface-container-lowest border border-outline-variant/60 rounded-xl relative overflow-hidden flex items-center justify-center radar-sweep">
+                <div className="absolute inset-0 grid-pattern opacity-40 grid-pattern-pulse"></div>
                 
                 {/* Mock Map corridors SVG */}
                 <svg className="w-full h-full opacity-15" viewBox="0 0 100 100" preserveAspectRatio="none">

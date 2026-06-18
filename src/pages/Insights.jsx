@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Badge from '../components/ui/Badge';
+import ScrambledText from '../components/ui/ScrambledText';
 import AnimatedMap from '../components/ui/AnimatedMap';
 import AnimatedWeapon from '../components/ui/AnimatedWeapon';
 import { initialAgents } from '../data/state';
@@ -66,7 +67,9 @@ const Insights = () => {
     >
       {/* Header */}
       <motion.div variants={itemVariants} className="flex flex-col gap-1 border-b border-outline-variant pb-6 select-none">
-        <h2 className="font-headline text-2xl font-extrabold text-primary uppercase">Tactical Insights</h2>
+        <h2 className="font-headline text-2xl font-extrabold text-primary uppercase">
+          <ScrambledText text="Tactical Insights" />
+        </h2>
         <p className="text-xs text-on-surface-variant">
           Real-time algorithmic analysis of Team Liquid's performance architecture and opponent vulnerabilities
         </p>
@@ -75,7 +78,7 @@ const Insights = () => {
       {/* Alerts Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Card 1 */}
-        <motion.div variants={itemVariants} className="bg-surface-container-lowest border border-outline-variant p-6 rounded-xl overflow-hidden relative group flex flex-col justify-between h-48 hover:border-primary/50 transition-all glow-cyan">
+        <motion.div variants={itemVariants} className="bg-surface-container-lowest border border-outline-variant p-6 rounded-xl overflow-hidden relative group flex flex-col justify-between h-48 hover:border-primary/50 transition-all glow-cyan radar-sweep">
           <div className="absolute right-[-20px] top-[-20px] w-[180px] h-[180px] select-none opacity-20 group-hover:opacity-40 transition-opacity pointer-events-none">
             <AnimatedMap />
           </div>

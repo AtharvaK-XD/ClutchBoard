@@ -88,6 +88,63 @@
   .animation-delay-4000 {
     animation-delay: 4s;
   }
+  
+  /* Scanlines Effect */
+  .scanlines {
+    position: relative;
+  }
+  .scanlines::before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 50;
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
+  }
+  
+  /* Radar Sweep Effect */
+  .radar-sweep {
+    position: relative;
+    overflow: hidden;
+  }
+  .radar-sweep::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(from 0deg, transparent 70%, rgba(57, 255, 20, 0.1) 80%, rgba(57, 255, 20, 0.8) 100%);
+    transform-origin: center;
+    animation: radar-spin 4s linear infinite;
+    pointer-events: none;
+    z-index: 10;
+    transform: translate(-50%, -50%);
+  }
+  
+  @keyframes radar-spin {
+    from {
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+
+  /* Pulsing Grid */
+  .grid-pattern-pulse {
+    animation: grid-pulse 4s ease-in-out infinite;
+  }
+  
+  @keyframes grid-pulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.7; }
+  }
 }
 
 body {
@@ -95,4 +152,8 @@ body {
   color: #E8ECEF;
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
+}
+
+#root {
+  position: relative;
 }

@@ -9,7 +9,7 @@ const Layout = ({ contextValue }) => {
   const { searchVal, onSearchChange } = contextValue;
 
   return (
-    <div className="min-h-screen bg-background text-on-background grid-pattern relative overflow-hidden">
+    <div className="min-h-screen bg-background text-on-background grid-pattern relative overflow-hidden scanlines">
       {/* Background Ambient Blobs */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-[120px] pointer-events-none animate-blob"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-500/5 rounded-full blur-[150px] pointer-events-none animate-blob animation-delay-2000"></div>
@@ -26,10 +26,10 @@ const Layout = ({ contextValue }) => {
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.25, ease: 'easeInOut' }}
+            initial={{ opacity: 0, x: 20, filter: 'blur(4px)', scale: 0.98 }}
+            animate={{ opacity: 1, x: 0, filter: 'blur(0px)', scale: 1 }}
+            exit={{ opacity: 0, x: -20, filter: 'blur(4px)', scale: 0.98 }}
+            transition={{ type: "spring", stiffness: 300, damping: 25 }}
           >
             <Outlet context={contextValue} />
           </motion.div>
