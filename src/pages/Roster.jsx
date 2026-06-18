@@ -11,6 +11,7 @@ import {
 } from 'recharts';
 import { motion } from 'framer-motion';
 import Badge from '../components/ui/Badge';
+import TiltCard from '../components/ui/TiltCard';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -175,9 +176,9 @@ const Roster = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.05 }}
-              whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(57, 255, 20, 0.1)" }}
-              className="bg-surface-container-lowest border border-outline-variant p-4 rounded-xl flex flex-col justify-between gap-4 transition-colors hover:border-primary/50 relative overflow-hidden group"
+              style={{ perspective: 1000 }}
             >
+              <TiltCard className="bg-surface-container-lowest border border-outline-variant p-4 rounded-xl flex flex-col justify-between gap-4 transition-colors hover:border-primary/50 relative group h-full">
               <div className="absolute -right-4 -top-4 w-16 h-16 bg-primary/5 rounded-full blur-xl group-hover:bg-primary/20 transition-all"></div>
               <div className="flex justify-between items-start">
                 <div className="flex items-center gap-3">
@@ -249,6 +250,7 @@ const Roster = () => {
                   {selectedLineup.find(s => s.id === p.id) ? 'REMOVE' : 'ADD'}
                 </button>
               </div>
+              </TiltCard>
             </motion.div>
           ))}
 
