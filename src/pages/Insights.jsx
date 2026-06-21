@@ -15,6 +15,7 @@ import Badge from '../components/ui/Badge';
 import ScrambledText from '../components/ui/ScrambledText';
 import AnimatedMap from '../components/ui/AnimatedMap';
 import AnimatedWeapon from '../components/ui/AnimatedWeapon';
+import TypewriterText from '../components/ui/TypewriterText';
 import { initialAgents } from '../data/state';
 
 const containerVariants = {
@@ -223,8 +224,12 @@ const Insights = () => {
                 <span className="text-xs font-bold text-on-secondary">Coach Red</span>
                 <span className="text-[9px] font-mono text-on-surface-variant uppercase">Team Liquid Analyst</span>
               </div>
-              <p className="text-xs text-on-surface/90 italic leading-relaxed">
-                "Our Haven setup is near-perfect. The focus this week must be pistol round discipline. We're gifting too many free rounds in eco situations."
+              <p className="text-xs text-on-surface/90 italic leading-relaxed min-h-[48px]">
+                <TypewriterText 
+                  text="&quot;Our Haven setup is near-perfect. The focus this week must be pistol round discipline. We're gifting too many free rounds in eco situations.&quot;" 
+                  delay={500} 
+                  speed={20} 
+                />
               </p>
             </div>
           </div>
